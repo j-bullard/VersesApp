@@ -18,7 +18,7 @@ struct ContentView: View {
             }
             
             Tab {
-                Text("Library")
+                LibraryView()
             } label: {
                 Label("Library", systemImage: "books.vertical")
                     .environment(\.symbolVariants, .none)
@@ -36,4 +36,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .previewDataContainer()
 }
