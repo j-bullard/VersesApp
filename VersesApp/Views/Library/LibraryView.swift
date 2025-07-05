@@ -30,7 +30,18 @@ struct LibraryView: View {
             .sheet(isPresented: $showAddCollectionSheet) {
                 CollectionFormView()
             }
+            .overlay {
+                if collections.isEmpty {
+                    emptyLibraryView
+                }
+            }
+            .scrollDisabled(collections.isEmpty)
         }
+    }
+    
+    @ViewBuilder
+    private var emptyLibraryView: some View {
+        ContentUnavailableView("Your library is empty.", systemImage: "folder", description: Text("Add your first collection by tapping the plus button in the toolbar."))
     }
     
     @ToolbarContentBuilder
