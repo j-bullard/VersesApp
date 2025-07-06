@@ -27,17 +27,32 @@ struct LibraryView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    NavigationLink(destination: AllVersesView()) {
+                        HStack(alignment: .center, spacing: 12) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .foregroundStyle(.indigo)
+                                    .frame(width: 32, height: 32)
+                                
+                                Image(systemName: "tray.fill")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 16, weight: .semibold))
+                            }
+                            
+                            Text("All Verses")
+                        }
+                    }
+                }
+                
                 ForEach(filteredCollections) { collection in
-                    NavigationLink(value: collection) {
+                    NavigationLink(destination: CollectionDetailView(collection: collection)) {
                         CollectionRow(collection: collection)
                     }
                 }
             }
             .environment(\.defaultMinListRowHeight, 50)
             .navigationTitle("Library")
-            .navigationDestination(for: Collection.self) { collection in
-                CollectionDetailView(collection: collection)
-            }
             .searchable(text: $searchText, prompt: "Search collections")
             .accessibilityLabel("Collections list")
             .toolbar {

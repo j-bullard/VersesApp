@@ -17,12 +17,11 @@ struct PreviewDataContainerViewModifier: ViewModifier {
         // Add collections
         for collection in Collection.samples {
             container.mainContext.insert(collection)
-        }
-        
-        // Add verses
-        for verse in Verse.samples {
-            verse.collections.append(Collection.samples.first!)
-            container.mainContext.insert(verse)
+            
+            for verse in Verse.samples {
+                collection.verses.append(verse)
+                container.mainContext.insert(verse)
+            }
         }
     }
     
