@@ -36,6 +36,16 @@ struct CollectionDetailView: View {
         .sheet(isPresented: $showAddVerseSheet) {
             AddVerseView(collection: collection)
         }
+        .overlay {
+            if collection.verses.isEmpty {
+                ContentUnavailableView(
+                    "No Verses Yet",
+                    systemImage: "book.closed",
+                    description: Text("Start building your collection.")
+                )
+            }
+        }
+        .scrollDisabled(collection.verses.isEmpty)
     }
     
     @ToolbarContentBuilder

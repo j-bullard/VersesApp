@@ -76,20 +76,12 @@ struct LibraryView: View {
     
     @ViewBuilder
     private var overlayContent: some View {
-        if filteredCollections.isEmpty {
-            if searchText.isEmpty {
-                ContentUnavailableView(
-                    "No Collections Yet",
-                    systemImage: "folder",
-                    description: Text("Tap the plus button to start your first collection.")
-                )
-            } else {
-                ContentUnavailableView(
-                    "No Results Found",
-                    systemImage: "magnifyingglass",
-                    description: Text("Try adjusting your search or check your spelling.")
-                )
-            }
+        if filteredCollections.isEmpty && !searchText.isEmpty {
+            ContentUnavailableView(
+                "No Results Found",
+                systemImage: "magnifyingglass",
+                description: Text("Try adjusting your search or check your spelling.")
+            )
         }
     }
     

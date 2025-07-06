@@ -36,6 +36,10 @@ struct AllVersesView: View {
             }
             .navigationTitle("All Verses")
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search verses")
+            .overlay {
+                overlayContent
+            }
+            .scrollDisabled(uniqueFilteredVerses.isEmpty)
         }
     }
     
@@ -45,7 +49,8 @@ struct AllVersesView: View {
             if searchText.isEmpty {
                 ContentUnavailableView(
                     "No Verses Yet",
-                    systemImage: "questionmark.text.page"
+                    systemImage: "book.closed",
+                    description: Text("Start building your collection.")
                 )
             } else {
                 ContentUnavailableView(
