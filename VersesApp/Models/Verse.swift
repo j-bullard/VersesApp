@@ -19,7 +19,6 @@ final class Verse {
     var reference: String
     var createdDate: Date = Date()
     
-    @Relationship(inverse: \Collection.verses)
     var collections: [Collection] = []
     
     // MARK: - Initialization

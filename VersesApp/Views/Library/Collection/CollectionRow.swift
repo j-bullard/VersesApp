@@ -13,6 +13,7 @@ struct CollectionRow: View {
     let collection: Collection
     
     @State private var showEditCollectionSheet = false
+    @State private var showDeleteAlert: Bool = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -28,13 +29,19 @@ struct CollectionRow: View {
             }
             
             Text(collection.name)
+            Spacer()
+            Text("\(collection.verses.count)")
+                .foregroundStyle(.secondary)
         }
         .swipeActions(edge: .trailing) {
-            Button("Delete", systemImage: "trash", role: .destructive) {
-                modelContext.delete(collection)
-                
-                try? modelContext.save()
+            Button("Delete", systemImage: "trash") {
+                if !collection.verses.isEmpty {
+                    showDeleteAlert.toggle()
+                } else {
+                    deleteCollection()
+                }
             }
+            .tint(.red)
             
             Button("Edit", systemImage: "info.circle") {
                 showEditCollectionSheet.toggle()
@@ -43,6 +50,20 @@ struct CollectionRow: View {
         .sheet(isPresented: $showEditCollectionSheet) {
             CollectionFormView(collection: collection)
         }
+        .alert("Delete \"\(collection.name)\"", isPresented: $showDeleteAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                deleteCollection()
+            }
+        } message: {
+            Text("Are you sure you want to delete this collection? All verses will be lost.")
+        }
+    }
+    
+    private func deleteCollection() {
+        modelContext.delete(collection)
+        
+        try? modelContext.save()
     }
 }
 
