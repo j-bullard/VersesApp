@@ -17,13 +17,14 @@ struct CollectionRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             ZStack {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 6)
                     .foregroundStyle(collection.theme.mainColor)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 30, height: 30)
                 
                 Image(systemName: collection.icon)
                     .foregroundStyle(collection.theme.accentColor)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
+                    .imageScale(.medium)
             }
             
             Text(collection.name)
@@ -48,6 +49,9 @@ struct CollectionRow: View {
 #Preview {
     List {
         CollectionRow(collection: Collection.samples[0])
-            .previewDataContainer()
+        CollectionRow(collection: Collection.samples[1])
+        CollectionRow(collection: Collection.samples[2])
+        CollectionRow(collection: Collection.samples[3])
     }
+    .previewDataContainer()
 }

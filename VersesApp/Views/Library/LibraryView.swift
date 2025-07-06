@@ -31,13 +31,14 @@ struct LibraryView: View {
                     NavigationLink(destination: AllVersesView()) {
                         HStack(alignment: .center, spacing: 12) {
                             ZStack {
-                                RoundedRectangle(cornerRadius: 8)
+                                RoundedRectangle(cornerRadius: 6)
                                     .foregroundStyle(.indigo)
-                                    .frame(width: 32, height: 32)
+                                    .frame(width: 30, height: 30)
                                 
                                 Image(systemName: "tray.fill")
                                     .foregroundStyle(.white)
-                                    .font(.system(size: 16, weight: .semibold))
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .imageScale(.medium)
                             }
                             
                             Text("All Verses")
@@ -51,7 +52,6 @@ struct LibraryView: View {
                     }
                 }
             }
-            .environment(\.defaultMinListRowHeight, 50)
             .navigationTitle("Library")
             .searchable(text: $searchText, prompt: "Search collections")
             .accessibilityLabel("Collections list")
