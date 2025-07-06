@@ -70,7 +70,6 @@ struct LibraryView: View {
             .overlay {
                 overlayContent
             }
-            .scrollDisabled(collections.isEmpty)
         }
     }
     

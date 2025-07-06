@@ -27,13 +27,13 @@ public class BibleHelper {
         }
     }
     
-    func getVerses(translation: Translation, bookName: String, chapter: Int, verseRange: ClosedRange<Int>) -> [String] {
+    func getVerseStringSegments(translation: Translation, bookName: String, chapter: Int, range: ClosedRange<Int>) -> [String] {
         guard let bible = loadBible(translation: translation),
               let chapters = bible[bookName],
               let verses = chapters["\(chapter)"] else {
             return []
         }
         
-        return verseRange.compactMap { verses["\($0)"] }
+        return Array(range).compactMap { verses["\($0)"] }
     }
 }

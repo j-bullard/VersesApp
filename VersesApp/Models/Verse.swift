@@ -15,14 +15,16 @@ final class Verse {
     var chapter: Int
     var startVerse: Int
     var endVerse: Int
-    var content: [String]
     var reference: String
     var createdDate: Date = Date()
     
     var collections: [Collection] = []
     
+    @Relationship(deleteRule: .cascade, inverse: \VerseSegment.verse)
+    var segments: [VerseSegment] = []
+    
     var fullVerse: String {
-        content.joined(separator: " ")
+        segments.compactMap { $0.text }.joined(separator: " ")
     }
     
     // MARK: - Initialization
@@ -32,7 +34,6 @@ final class Verse {
         chapter: Int,
         startVerse: Int,
         endVerse: Int,
-        content: [String],
         reference: String
     ) {
         self.translation = translation
@@ -40,7 +41,6 @@ final class Verse {
         self.chapter = chapter
         self.startVerse = startVerse
         self.endVerse = endVerse
-        self.content = content
         self.reference = reference
     }
 }
@@ -49,9 +49,9 @@ final class Verse {
 extension Verse {
     static var samples: [Verse] {
         [
-            Verse(translation: .nasb, book: Book.Genesis, chapter: 1, startVerse: 1, endVerse: 1, content: ["In the beginning God created the heavens and the earth."], reference: "Genesis 1:1"),
-            
-            Verse(translation: .nasb, book: Book.Mark, chapter: 1, startVerse: 15, endVerse: 15, content: ["and saying, “The time is fulfilled, and the kingdom of God has come near; repent and believe in the gospel.”"], reference: "Mark 1:15")
+            Verse(translation: .nasb, book: Book.Genesis, chapter: 1, startVerse: 1, endVerse: 1, reference: "Genesis 1:1"),
+            Verse(translation: .nasb, book: Book.Mark, chapter: 1, startVerse: 15, endVerse: 15, reference: "Mark 1:15"),
+            Verse(translation: .nasb, book: Book.Hebrews, chapter: 4, startVerse: 12, endVerse: 16, reference: "Hebrews 4:12-16")
         ]
     }
 }

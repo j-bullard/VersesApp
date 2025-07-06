@@ -22,8 +22,13 @@ struct AddVerseView: View {
     @State private var dueDate: Date = Date()
     @State private var path = NavigationPath()
     
-    private var versesText: [String] {
-        BibleHelper.shared.getVerses(translation: selectedTranslation, bookName: selectedVerse.book.name, chapter: selectedVerse.chapter, verseRange: selectedVerse.startVerse...selectedVerse.endVerse)
+    private var verseText: [String] {
+        BibleHelper.shared.getVerseStringSegments(
+            translation: selectedTranslation,
+            bookName: selectedVerse.book.name,
+            chapter: selectedVerse.chapter,
+            range: selectedVerse.startVerse...selectedVerse.endVerse
+        )
     }
     
     var body: some View {
@@ -62,23 +67,20 @@ struct AddVerseView: View {
                 }
                 
                 Section("Scripture") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        ForEach(0...(selectedVerse.endVerse - selectedVerse.startVerse), id: \.self) { index in
-                            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                                Text("\(selectedVerse.startVerse + index)")
-                                    .font(.footnote)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.secondary)
-                                    .padding(.top, 2)
-                                Text(versesText[index])
-                                    .font(.callout)
-                                    .lineSpacing(2)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                Spacer()
-                            }
+                    ForEach(0...(selectedVerse.endVerse - selectedVerse.startVerse), id: \.self) { index in
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text("\(selectedVerse.startVerse + index)")
+                                .font(.footnote)
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary)
+                                .padding(.top, 2)
+                            Text(verseText[index])
+                                .font(.callout)
+                                .lineSpacing(2)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Spacer()
                         }
                     }
-                    .padding(.horizontal, 8)
                 }
             }
             .navigationTitle("Add Verse")
@@ -106,23 +108,45 @@ struct AddVerseView: View {
         ToolbarItem(placement: .primaryAction) {
             Button("Done") {
                 if !collection.verses.contains(where: { $0.reference == selectedVerse.reference }) {
-                    let verse = Verse(
-                        translation: selectedTranslation,
-                        book: selectedVerse.book,
-                        chapter: selectedVerse.chapter,
-                        startVerse: selectedVerse.startVerse,
-                        endVerse: selectedVerse.endVerse,
-                        content: versesText,
-                        reference: selectedVerse.reference
-                    )
-                    
-                    modelContext.insert(verse)
-                    collection.verses.append(verse)
-                    try? modelContext.save()
+                    createVerse()
                 }
                 dismiss()
             }
         }
+    }
+    
+    private func createVerse() {
+        let translation = selectedTranslation
+        let book = selectedVerse.book
+        let chapter = selectedVerse.chapter
+        let startVerse = selectedVerse.startVerse
+        let endVerse = selectedVerse.endVerse
+        let reference = selectedVerse.reference
+        
+        let verse = Verse(
+            translation: translation,
+            book: book,
+            chapter: chapter,
+            startVerse: startVerse,
+            endVerse: endVerse,
+            reference: reference
+        )
+        
+        let verseStringSegments = BibleHelper.shared.getVerseStringSegments(
+            translation: translation,
+            bookName: book.name,
+            chapter: chapter,
+            range: startVerse...endVerse
+        )
+        
+        for (index, text) in verseStringSegments.enumerated() {
+            let segment = VerseSegment(text: text, verseNumber: startVerse + index, order: index)
+            verse.segments.append(segment)
+        }
+        
+        modelContext.insert(verse)
+        collection.verses.append(verse)
+        try? modelContext.save()
     }
 }
 
