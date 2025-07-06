@@ -39,6 +39,13 @@ struct AddVerseView: View {
     @State private var dueDate: Date = Date()
     @State private var path = NavigationPath()
     
+    private var text: String {
+        BibleHelper.shared.getVerseText(
+            translation: selectedTranslation,
+            selectedVerse: selectedVerse
+        ) ?? ""
+    }
+    
     var body: some View {
         NavigationStack(path: $path) {
             Form {
@@ -73,6 +80,11 @@ struct AddVerseView: View {
                     }
                     .buttonStyle(.plain)
                 }
+                
+                Section("Scripture") {
+                    Text(text)
+                        .font(.callout)
+                }
             }
             .navigationTitle("Add Verse")
             .navigationBarTitleDisplayMode(.inline)
@@ -105,7 +117,7 @@ struct AddVerseView: View {
                         chapter: selectedVerse.chapter,
                         startVerse: selectedVerse.startVerse,
                         endVerse: selectedVerse.endVerse,
-                        text: "",
+                        text: text,
                         reference: selectedVerse.reference
                     )
                     
