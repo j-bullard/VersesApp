@@ -17,6 +17,7 @@ final class Verse {
     var endVerse: Int
     var reference: String
     var createdDate: Date = Date()
+    var order: Int = 0
     
     var collections: [Collection] = []
     
@@ -34,7 +35,8 @@ final class Verse {
         chapter: Int,
         startVerse: Int,
         endVerse: Int,
-        reference: String
+        reference: String,
+        order: Int = 0
     ) {
         self.translation = translation
         self.bookId = book.id
@@ -42,6 +44,7 @@ final class Verse {
         self.startVerse = startVerse
         self.endVerse = endVerse
         self.reference = reference
+        self.order = order
     }
 }
 

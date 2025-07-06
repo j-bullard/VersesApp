@@ -18,7 +18,8 @@ struct PreviewDataContainerViewModifier: ViewModifier {
         for collection in Collection.samples {
             container.mainContext.insert(collection)
             
-            for verse in Verse.samples {
+            for (index, verse) in Verse.samples.enumerated() {
+                verse.order = index
                 collection.verses.append(verse)
                 container.mainContext.insert(verse)
             }
@@ -36,24 +37,3 @@ extension View {
         modifier(PreviewDataContainerViewModifier())
     }
 }
-
-/*
- @MainActor
- class DataController {
-     static let previewContainer: ModelContainer = {
-         do {
-             let config = ModelConfiguration(isStoredInMemoryOnly: true)
-             let container = try ModelContainer(for: User.self, configurations: config)
-
-             for i in 1...9 {
-                 let user = User(name: "Example User \(i)")
-                 container.mainContext.insert(user)
-             }
-
-             return container
-         } catch {
-             fatalError("Failed to create model container for previewing: \(error.localizedDescription)")
-         }
-     }()
- }
- */
