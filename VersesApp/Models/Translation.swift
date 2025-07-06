@@ -32,7 +32,7 @@ public enum Translation: String, CaseIterable, Identifiable, Codable, Hashable {
         switch self {
         case .akjv: return "American King James Version"
         case .asv: return "American Standard Version"
-        case .esv: return "English Standard Version Revision 2016"
+        case .esv: return "English Standard Version"
         case .gw: return "God's Word"
         case .kjv: return "King James Version"
         case .nasb: return "New American Standard Bible"
