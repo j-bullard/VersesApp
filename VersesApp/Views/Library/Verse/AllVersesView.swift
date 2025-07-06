@@ -20,7 +20,7 @@ struct AllVersesView: View {
         if !searchText.isEmpty {
             return uniqueVerses.filter {
                 $0.reference.localizedCaseInsensitiveContains(searchText) ||
-                $0.text.localizedCaseInsensitiveContains(searchText)
+                $0.fullVerse.localizedCaseInsensitiveContains(searchText)
             }
         }
         

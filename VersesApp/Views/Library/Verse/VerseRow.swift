@@ -18,7 +18,7 @@ struct VerseRow: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(verse.reference)
-            Text(verse.text)
+            Text(verse.fullVerse)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)

@@ -19,22 +19,21 @@ public class BibleHelper {
         case .success(let data):
             return data
         case .failure(let error):
-            print(error.localizedDescription)
+            print("Failed to load Bible: \(error.localizedDescription)")
             return nil
-        default:
+        case .none:
+            print("Bible file not found")
             return nil
         }
     }
     
-    func getVerseText(translation: Translation, selectedVerse: SelectedVerse) -> String? {
+    func getVerses(translation: Translation, bookName: String, chapter: Int, verseRange: ClosedRange<Int>) -> [String] {
         guard let bible = loadBible(translation: translation),
-              let chapters = bible[selectedVerse.book.name],
-              let verses = chapters["\(selectedVerse.chapter)"] else {
-            return nil
+              let chapters = bible[bookName],
+              let verses = chapters["\(chapter)"] else {
+            return []
         }
         
-        let range = selectedVerse.startVerse...selectedVerse.endVerse
-        let selectedVerses = range.compactMap { verses["\($0)"] }
-        return selectedVerses.joined(separator: " ")
+        return verseRange.compactMap { verses["\($0)"] }
     }
 }

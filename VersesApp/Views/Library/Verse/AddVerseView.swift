@@ -39,11 +39,8 @@ struct AddVerseView: View {
     @State private var dueDate: Date = Date()
     @State private var path = NavigationPath()
     
-    private var text: String {
-        BibleHelper.shared.getVerseText(
-            translation: selectedTranslation,
-            selectedVerse: selectedVerse
-        ) ?? ""
+    private var versesText: [String] {
+        BibleHelper.shared.getVerses(translation: selectedTranslation, bookName: selectedVerse.book.name, chapter: selectedVerse.chapter, verseRange: selectedVerse.startVerse...selectedVerse.endVerse)
     }
     
     var body: some View {
@@ -82,8 +79,23 @@ struct AddVerseView: View {
                 }
                 
                 Section("Scripture") {
-                    Text(text)
-                        .font(.callout)
+                    VStack(alignment: .leading, spacing: 8) {
+                        ForEach(0...(selectedVerse.endVerse - selectedVerse.startVerse), id: \.self) { index in
+                            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                Text("\(selectedVerse.startVerse + index)")
+                                    .font(.footnote)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.secondary)
+                                    .padding(.top, 2)
+                                Text(versesText[index])
+                                    .font(.callout)
+                                    .lineSpacing(2)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Spacer()
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 8)
                 }
             }
             .navigationTitle("Add Verse")
@@ -117,7 +129,7 @@ struct AddVerseView: View {
                         chapter: selectedVerse.chapter,
                         startVerse: selectedVerse.startVerse,
                         endVerse: selectedVerse.endVerse,
-                        text: text,
+                        content: versesText,
                         reference: selectedVerse.reference
                     )
                     
