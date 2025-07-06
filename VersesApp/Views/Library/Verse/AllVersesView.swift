@@ -11,7 +11,6 @@ import SwiftUI
 struct AllVersesView: View {
     @State private var searchText: String = ""
     
-    
     @Query private var verses: [Verse]
     
     /// Only get unique verses based on reference. Two collections can contain the same verse reference. This will prevent a verse (e.g., Genesis 1:1) added to two different collections from showing twice.
@@ -36,7 +35,7 @@ struct AllVersesView: View {
                 }
             }
             .navigationTitle("All Verses")
-            .searchable(text: $searchText, prompt: "Search verses")
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search verses")
         }
     }
     

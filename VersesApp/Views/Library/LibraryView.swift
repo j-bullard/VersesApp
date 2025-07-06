@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LibraryView: View {
     @Query(sort: \Collection.name) private var collections: [Collection]
+    @Query private var verses: [Verse]
     
     @State private var searchText: String = ""
     @FocusState private var searchFocused: Bool
@@ -43,6 +44,9 @@ struct LibraryView: View {
                             }
                             
                             Text("All Verses")
+                            Spacer()
+                            Text("\(verses.count)")
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -54,7 +58,7 @@ struct LibraryView: View {
                 }
             }
             .navigationTitle("Library")
-            .searchable(text: $searchText, prompt: "Search collections")
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search collections")
             .searchFocused($searchFocused)
             .accessibilityLabel("Collections list")
             .toolbar {
