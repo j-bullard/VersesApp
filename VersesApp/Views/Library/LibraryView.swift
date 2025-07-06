@@ -35,6 +35,9 @@ struct LibraryView: View {
             }
             .environment(\.defaultMinListRowHeight, 50)
             .navigationTitle("Library")
+            .navigationDestination(for: Collection.self) { collection in
+                CollectionDetailView(collection: collection)
+            }
             .searchable(text: $searchText, prompt: "Search collections")
             .accessibilityLabel("Collections list")
             .toolbar {

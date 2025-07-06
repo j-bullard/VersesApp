@@ -9,13 +9,24 @@ import SwiftData
 import SwiftUI
 
 struct CollectionDetailView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     let collection: Collection
     
     @State private var showAddVerseSheet: Bool = false
     
     var body: some View {
         List {
-            // TODO: Loop through verses
+            ForEach(collection.verses) { verse in
+                Text(verse.reference)
+                    .swipeActions(edge: .trailing) {
+                        Button("Remove", systemImage: "minus.circle.fill", role: .destructive) {
+                            modelContext.delete(verse)
+                            
+                            try? modelContext.save()
+                        }
+                    }
+            }
         }
         .navigationTitle(collection.name)
         .navigationBarTitleDisplayMode(.large)
@@ -23,7 +34,7 @@ struct CollectionDetailView: View {
             toolbarContent
         }
         .sheet(isPresented: $showAddVerseSheet) {
-            EmptyView()
+            AddVerseView(collection: collection)
         }
     }
     
@@ -41,4 +52,5 @@ struct CollectionDetailView: View {
     NavigationStack {
         CollectionDetailView(collection: Collection.samples[0])
     }
+    .previewDataContainer()
 }

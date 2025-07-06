@@ -13,7 +13,7 @@ struct VersesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: [Collection.self])
+                .modelContainer(for: [Collection.self, Verse.self])
         }
     }
 }

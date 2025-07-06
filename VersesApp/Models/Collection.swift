@@ -15,6 +15,8 @@ final class Collection {
     var themeRawValue: String
     var createdAt: Date = Date()
     
+    var verses: [Verse] = []
+    
     var theme: Theme {
         get { Theme(rawValue: themeRawValue)! }
         set { themeRawValue = newValue.rawValue }

@@ -18,6 +18,12 @@ struct PreviewDataContainerViewModifier: ViewModifier {
         for collection in Collection.samples {
             container.mainContext.insert(collection)
         }
+        
+        // Add verses
+        for verse in Verse.samples {
+            verse.collections.append(Collection.samples.first!)
+            container.mainContext.insert(verse)
+        }
     }
     
     func body(content: Content) -> some View {
