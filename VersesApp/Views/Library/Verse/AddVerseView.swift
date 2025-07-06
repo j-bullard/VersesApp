@@ -129,7 +129,8 @@ struct AddVerseView: View {
             chapter: chapter,
             startVerse: startVerse,
             endVerse: endVerse,
-            reference: reference
+            reference: reference,
+            order: collection.verses.count
         )
         
         let verseStringSegments = BibleHelper.shared.getVerseStringSegments(
