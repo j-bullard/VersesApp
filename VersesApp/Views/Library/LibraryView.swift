@@ -11,12 +11,23 @@ import SwiftUI
 struct LibraryView: View {
     @Query(sort: \Collection.name) private var collections: [Collection]
     
+    @State private var searchText: String = ""
     @State private var showAddCollectionSheet: Bool = false
+    
+    var filteredCollections: [Collection] {
+        if searchText.isEmpty {
+            return collections
+        }
+        
+        return collections.filter { collection in
+            collection.name.localizedCaseInsensitiveContains(searchText)
+        }
+    }
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(collections) { collection in
+                ForEach(filteredCollections) { collection in
                     NavigationLink(value: collection) {
                         CollectionRow(collection: collection)
                     }
@@ -24,6 +35,8 @@ struct LibraryView: View {
             }
             .environment(\.defaultMinListRowHeight, 50)
             .navigationTitle("Library")
+            .searchable(text: $searchText, prompt: "Search collections")
+            .accessibilityLabel("Collections list")
             .toolbar {
                 toolbarContent
             }
@@ -31,17 +44,29 @@ struct LibraryView: View {
                 CollectionFormView()
             }
             .overlay {
-                if collections.isEmpty {
-                    emptyLibraryView
-                }
+                overlayContent
             }
             .scrollDisabled(collections.isEmpty)
         }
     }
     
     @ViewBuilder
-    private var emptyLibraryView: some View {
-        ContentUnavailableView("Your library is empty.", systemImage: "folder", description: Text("Add your first collection by tapping the plus button in the toolbar."))
+    private var overlayContent: some View {
+        if filteredCollections.isEmpty {
+            if searchText.isEmpty {
+                ContentUnavailableView(
+                    "No Collections Yet",
+                    systemImage: "folder",
+                    description: Text("Tap the plus button to start your first collection.")
+                )
+            } else {
+                ContentUnavailableView(
+                    "No Results Found",
+                    systemImage: "magnifyingglass",
+                    description: Text("Try adjusting your search or check your spelling.")
+                )
+            }
+        }
     }
     
     @ToolbarContentBuilder
