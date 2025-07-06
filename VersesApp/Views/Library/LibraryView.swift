@@ -12,6 +12,7 @@ struct LibraryView: View {
     @Query(sort: \Collection.name) private var collections: [Collection]
     
     @State private var searchText: String = ""
+    @FocusState private var searchFocused: Bool
     @State private var showAddCollectionSheet: Bool = false
     
     var filteredCollections: [Collection] {
@@ -27,7 +28,7 @@ struct LibraryView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
+                if !searchFocused {
                     NavigationLink(destination: AllVersesView()) {
                         HStack(alignment: .center, spacing: 12) {
                             ZStack {
@@ -54,6 +55,7 @@ struct LibraryView: View {
             }
             .navigationTitle("Library")
             .searchable(text: $searchText, prompt: "Search collections")
+            .searchFocused($searchFocused)
             .accessibilityLabel("Collections list")
             .toolbar {
                 toolbarContent

@@ -33,7 +33,7 @@ extension Collection {
         "cloud.fill",
         "rainbow",
         "flame.fill",
-        "music.note",
+        "music.quarternote.3",
         "heart.fill",
         "star.fill",
         "flag.fill",

@@ -39,7 +39,7 @@ extension Collection {
             Collection(name: "Study Notes", icon: "book.fill", theme: .blood),
             Collection(name: "Favorite Verses", icon: "star.fill", theme: .tigers),
             Collection(name: "Memory Verses", icon: "brain.fill", theme: .lavender),
-            Collection(name: "Worship Songs", icon: "music.note", theme: .flame),
+            Collection(name: "Worship Songs", icon: "music.quarternote.3", theme: .flame),
             Collection(name: "Sermons", icon: "graduationcap.fill", theme: .ocean),
             Collection(name: "Bible Study", icon: "books.vertical.fill", theme: .sky),
             Collection(name: "Testimonies", icon: "trophy.fill", theme: .sunflower),
