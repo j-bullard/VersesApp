@@ -8,11 +8,19 @@
 import Foundation
 
 public enum Translation: String, CaseIterable, Identifiable, Codable, Hashable {
+    case akjv
+    case asv
+    case esv
+    case gw
+    case kjv
     case nasb
     case nasb1995
-    case esv
+    case net
     case niv
-    case kjv
+    case nkjv
+    case nlt
+    case web
+    case ylt
     
     public var id: String { self.rawValue }
     
@@ -22,11 +30,19 @@ public enum Translation: String, CaseIterable, Identifiable, Codable, Hashable {
     
     public var fullName: String {
         switch self {
+        case .akjv: return "American King James Version"
+        case .asv: return "American Standard Version"
+        case .esv: return "English Standard Version Revision 2016"
+        case .gw: return "God's Word"
+        case .kjv: return "King James Version"
         case .nasb: return "New American Standard Bible"
         case .nasb1995: return "New American Standard Bible (1995)"
-        case .esv: return "English Standard Version"
+        case .net: return "New English Translation"
         case .niv: return "New International Version"
-        case .kjv: return "King James Version"
+        case .nkjv: return "New King James Version"
+        case .nlt: return "New Living Translation"
+        case .web: return "World English Bible"
+        case .ylt: return "Young's Literal Translation"
         }
     }
 }
