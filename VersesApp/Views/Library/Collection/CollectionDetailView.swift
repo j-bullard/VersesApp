@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct CollectionDetailView: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
     let collection: Collection
@@ -16,6 +17,8 @@ struct CollectionDetailView: View {
     @State private var showAddVerseSheet: Bool = false
     @State private var editMode: EditMode = .inactive
     @State private var searchText: String = ""
+    @State private var showCollectionFormSheet: Bool = false
+    @State private var showDeleteCollectionAlert: Bool = false
     
     private var sortedVerses: [Verse] {
         collection.verses.sorted { lhs, rhs in
@@ -32,7 +35,7 @@ struct CollectionDetailView: View {
                 if editMode != .active {
                     Text(verse.reference)
                         .swipeActions(edge: .trailing) {
-                            Button("Remove", systemImage: "minus.circle.fill", role: .destructive) {
+                            Button("Remove", role: .destructive) {
                                 modelContext.delete(verse)
                                 
                                 try? modelContext.save()
@@ -65,18 +68,46 @@ struct CollectionDetailView: View {
         }
         .scrollDisabled(collection.verses.isEmpty)
         .environment(\.editMode, $editMode.animation())
+        .sheet(isPresented: $showCollectionFormSheet) {
+            CollectionFormView(collection: collection)
+        }
+        .alert("Delete \"\(collection.name)\"", isPresented: $showDeleteCollectionAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Delete", role: .destructive) {
+                self.modelContext.delete(collection)
+                try? self.modelContext.save()
+                dismiss()
+            }
+        } message: {
+            Text("This will delete all verses in this collection.")
+        }
     }
     
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            if !sortedVerses.isEmpty {
-                EditButton()
-            }
-            
-            if editMode != .active {
-                Button("Add Verse", systemImage: "plus.circle.fill") {
-                    showAddVerseSheet.toggle()
+        ToolbarItem(placement: .primaryAction) {
+            if editMode == .inactive {
+                Menu("Menu", systemImage: "ellipsis.circle") {
+                    Button("Show Collection Info", systemImage: "info.circle") {
+                        showCollectionFormSheet.toggle()
+                    }
+                    
+                    Button("Select Verses", systemImage: "checkmark.circle") {
+                        editMode = .active
+                    }
+                    .disabled(collection.verses.isEmpty)
+                    
+                    Button("Add Verse", systemImage: "text.badge.plus") {
+                        showAddVerseSheet.toggle()
+                    }
+                    
+                    Button("Delete Collection", systemImage: "trash", role: .destructive) {
+                        showDeleteCollectionAlert.toggle()
+                    }
+                }
+            } else {
+                Button("Done") {
+                    editMode = .inactive
                 }
             }
         }
