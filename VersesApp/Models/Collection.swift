@@ -15,6 +15,9 @@ final class Collection {
     var themeRawValue: String
     var createdAt: Date = Date()
     
+    @Relationship(deleteRule: .cascade, inverse: \CollectionSection.collection)
+    var sections: [CollectionSection] = []
+    
     @Relationship(deleteRule: .cascade, inverse: \Verse.collections)
     var verses: [Verse] = []
     

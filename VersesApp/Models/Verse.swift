@@ -20,6 +20,7 @@ final class Verse {
     var order: Int = 0
     
     var collections: [Collection] = []
+    var section: CollectionSection?
     
     @Relationship(deleteRule: .cascade, inverse: \VerseSegment.verse)
     var segments: [VerseSegment] = []
