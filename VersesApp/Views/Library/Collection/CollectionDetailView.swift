@@ -15,6 +15,7 @@ struct CollectionDetailView: View {
     
     @State private var showAddVerseSheet: Bool = false
     @State private var editMode: EditMode = .inactive
+    @State private var searchText: String = ""
     
     private var sortedVerses: [Verse] {
         collection.verses.sorted { lhs, rhs in
@@ -44,6 +45,7 @@ struct CollectionDetailView: View {
             .onMove(perform: move)
             .onDelete(perform: delete)
         }
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search verses")
         .navigationTitle(collection.name)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
