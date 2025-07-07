@@ -21,7 +21,12 @@ struct CollectionDetailView: View {
     @State private var showDeleteCollectionAlert: Bool = false
     
     private var sortedVerses: [Verse] {
-        collection.verses.sorted { lhs, rhs in
+        let filteredVerses = searchText.isEmpty ? collection.verses : collection.verses.filter {
+            $0.reference.localizedCaseInsensitiveContains(searchText) ||
+            $0.fullVerse.localizedCaseInsensitiveContains(searchText)
+        }
+        
+        return filteredVerses.sorted { lhs, rhs in
             if lhs.order == rhs.order {
                 return lhs.createdDate < rhs.createdDate
             }
@@ -58,12 +63,20 @@ struct CollectionDetailView: View {
             AddVerseView(collection: collection)
         }
         .overlay {
-            if collection.verses.isEmpty {
-                ContentUnavailableView(
-                    "No Verses Yet",
-                    systemImage: "book.closed",
-                    description: Text("Start building your collection.")
-                )
+            if sortedVerses.isEmpty {
+                if searchText.isEmpty {
+                    ContentUnavailableView(
+                        "No Verses Yet",
+                        systemImage: "book.closed",
+                        description: Text("Start building your collection.")
+                    )
+                } else {
+                    ContentUnavailableView(
+                        "No Results Found",
+                        systemImage: "text.page.badge.magnifyingglass",
+                        description: Text("Try adjusting your search or check your spelling.")
+                    )
+                }
             }
         }
         .scrollDisabled(collection.verses.isEmpty)
